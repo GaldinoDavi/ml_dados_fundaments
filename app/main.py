@@ -8,6 +8,7 @@ df_nota = pd.read_excel('data/dados_cerveja_nota.xlsx')
 df_nota.head()
 # %%
 from sklearn import linear_model
+from sklearn import tree
 
 X = df_nota[['cerveja']]
 y = df_nota[['nota']]
@@ -21,7 +22,15 @@ a,b = reg.intercept_ , reg.coef_[0]
 print(f"Intecpto: {a}, Coeficiente: {b}")
 
 # %%
-predict = reg.predict(X.drop_duplicates())
+predict_reg = reg.predict(X.drop_duplicates())
+
+arvore_full = tree.DecisionTreeRegressor(random_state=42)
+arvore_full.fit(X,y)
+predict_arvore_full = arvore_full.predict(X.drop_duplicates())
+
+arvore_d2 = tree.DecisionTreeRegressor(random_state=42, max_depth=2)
+arvore_d2.fit(X,y)
+predict_arvore_d2 = arvore_d2.predict(X.drop_duplicates())
 
 #%%
 
@@ -34,8 +43,17 @@ plt.xlabel("Cerveja")
 plt.ylabel("Nota")
 
 plt.plot(X.drop_duplicates()['cerveja'], predict)
+plt.plot(X.drop_duplicates()['cerveja'], predict_arvore_full)
+plt.plot(X.drop_duplicates()['cerveja'], predict_arvore_d2)
 
-plt.legend(['Observado', f'y = {a.item():.3f} + {b.item():.3f} x'])
+plt.legend(['Observado',
+            f'Regressão: y = {a.item():.3f} + {b.item():.3f} x',
+            'Árvore Full',
+            'Árvore d2'])
 
-# %%
-b
+#%%
+# Árvore de Decisão
+
+# Mudar a árvore para max_deph = 2 significa que estamos modificando
+# o hyper parâmetro
+
