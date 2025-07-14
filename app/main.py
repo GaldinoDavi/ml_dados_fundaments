@@ -28,7 +28,8 @@ arvore_full = tree.DecisionTreeRegressor(random_state=42)
 arvore_full.fit(X,y)
 predict_arvore_full = arvore_full.predict(X.drop_duplicates())
 
-arvore_d2 = tree.DecisionTreeRegressor(random_state=42, max_depth=2)
+arvore_d2 = tree.DecisionTreeRegressor(random_state=42, 
+                                       max_depth=2)
 arvore_d2.fit(X,y)
 predict_arvore_d2 = arvore_d2.predict(X.drop_duplicates())
 
@@ -49,11 +50,12 @@ plt.plot(X.drop_duplicates()['cerveja'], predict_arvore_d2)
 plt.legend(['Observado',
             f'Regressão: y = {a.item():.3f} + {b.item():.3f} x',
             'Árvore Full',
-            'Árvore d2'])
+            'Árvore Depth = 2'])
 
 #%%
-# Árvore de Decisão
+plt.figure(dpi=400)
+tree.plot_tree(arvore_d2,
+               feature_names=['Cerveja'],
+               filled=True)
 
-# Mudar a árvore para max_deph = 2 significa que estamos modificando
-# o hyper parâmetro
-
+# %%
